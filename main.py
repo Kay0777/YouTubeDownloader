@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QApplication
-from core import MyCoreWindow, Loader
+from core import MyCoreWindow, Loader, Open
 from pytube import YouTube
 from threading import Thread
 import sys
@@ -21,9 +21,8 @@ class YouTubeK(MyCoreWindow):
     def __init__(self):
         super().__init__()
         self.url.textChanged.connect(self.clear)
+        self.where.clicked.connect(self.get_output_path)
         self.download.clicked.connect(self.download_video)
-
-        # https://youtu.be/fShTCJrNgxA
 
     def clear(self):
         if self.url.text() == '':
@@ -31,7 +30,7 @@ class YouTubeK(MyCoreWindow):
 
     def download_video(self):
         self.loader = Loader()
-        self.get_output_path()
+        print(OUTPUT_URL)
 
         def download_now():
             global URL, RES, OUTPUT_URL, REGEXs
@@ -54,6 +53,7 @@ class YouTubeK(MyCoreWindow):
             else:
                 self.status.setText('Please! Check url')
             time.sleep(0.5)
+            self.loader.check = True
             self.loader.close()
 
         download = Thread(target=download_now)
@@ -61,7 +61,10 @@ class YouTubeK(MyCoreWindow):
 
     def get_output_path(self):
         global OUTPUT_URL
-        OUTPUT_URL = 'C:/Users/Kayrat/Desktop'
+
+        where = Open()
+        if where.exec_():
+            OUTPUT_URL = where.directory().absolutePath()
 
 
 def main():
