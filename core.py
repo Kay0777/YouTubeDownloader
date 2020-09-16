@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
+from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QFileDialog
 from PyQt5.QtWidgets import QLineEdit, QComboBox, QGridLayout
 from PyQt5.QtCore import Qt, QSize, QTimer
-from PyQt5.QtGui import QMovie
+from PyQt5.QtGui import QMovie, QKeySequence
 
 
 class MyCoreWindow(QWidget):
@@ -62,6 +62,8 @@ class MyCoreWindow(QWidget):
 
 
 class Loader(QWidget):
+    check = False
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setFixedSize(QSize(150, 100))
@@ -73,3 +75,19 @@ class Loader(QWidget):
         scene.setMovie(self.gif)
         self.gif.start()
         self.show()
+
+    def closeEvent(self, event):
+        if self.check:
+            event.accept()
+        else:
+            event.ignore()
+
+
+class Open(QFileDialog):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.move(self.frameGeometry().topLeft())
+        self.setFileMode(QFileDialog.Directory)
+        self.setWindowTitle('Saving file')
+        self.setOptions(QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks)
+        self.setLabelText(QFileDialog.Accept, "Save")
