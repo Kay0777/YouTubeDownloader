@@ -30,7 +30,6 @@ class YouTubeK(MyCoreWindow):
 
     def download_video(self):
         self.loader = Loader()
-        print(OUTPUT_URL)
 
         def download_now():
             global URL, RES, OUTPUT_URL, REGEXs
